@@ -8,6 +8,33 @@ from ioutils import read_xyz_file_perco
 from utils import percolating_clusters
 
 
+def calc_volume(labs, Nx, Ny, Nz, idx):
+    volume = 0.0
+    for i in range(Nx):
+        for j in range(Ny):
+            for k in range(Nz):
+                if labs[i][j][k] == idx:
+                    volume += 1.0
+    
+    return volume
+
+def calc_area(labs, Nx, Ny, Nz, idx):
+    area = 0.0
+    
+    for i in range(Nx):
+     for j in range(Ny):
+      for k in range(Nz):
+       for m in range(-1,0,1):
+        for n in range(-1,0,1):
+         for o in range(-1,0,1):
+          if (i+m) >= 0 and (i+m) < Nx and (j+n) >= 0 and (j+n) < Ny and (k+o) >= 0 and (k+o) < Nz:
+           if labs[i][j][k] == idx and labs[i+m][j+n][n+o] == 0:
+            area += 1.0
+    
+    return area
+    
+
+
 file_name = sys.argv[1]
 eps = float(sys.argv[2])
 
@@ -68,13 +95,18 @@ s = generate_binary_structure(3,1)
 labeled_array, num_features = label(lattice_3d, structure=s)
 
 percs = percolating_clusters(labeled_array, X_dim, Y_dim, Z_dim)
-print percs
-print "number of clusters=", num_features
+#print "number of clusters=", num_features
+#print percs
 
+volumes = []
+areas = []
 for ix in percs:
     if ix == 0:
         continue
 
+    volumes.append( calc_volume(labeled_array, X_dim, Y_dim, Z_dim, ix) )
+    areas.append( calc_area(labeled_array, X_dim, Y_dim, Z_dim, ix) )
+    
     X_3d_c = []
     Y_3d_c = []
     Z_3d_c = []
@@ -94,4 +126,8 @@ for ix in percs:
     mlab.points3d(X_3d_c, Y_3d_c, Z_3d_c, mode='cube', scale_factor=max( max(epsx, epsy),epsz ), opacity=1.0, color=(R,G,B))
 
 mlab.show()
-exit(1)
+
+print "VOLUMES:", volumes
+print "AREAS: ", areas
+print "V/A:", np.array(volumes)/np.array(areas)
+
