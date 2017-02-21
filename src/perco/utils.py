@@ -1,4 +1,3 @@
-
 def x_percs(latt, Lx, Ly, Lz):
     first_wall = []
     second_wall = []
@@ -102,8 +101,3 @@ def percolating_clusters(latt, Lx, Ly, Lz):
  
     clusters_ids = sorted(set( clusters_ids ))
     return clusters_ids    
-
-
-
-
-
