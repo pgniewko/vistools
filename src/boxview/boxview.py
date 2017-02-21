@@ -4,6 +4,8 @@ import sys
 from mayavi import mlab
 from ioutils import read_xyz_file
 
+#
+
 file_name = sys.argv[1]
 eps = float(sys.argv[2])
 
