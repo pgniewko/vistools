@@ -127,7 +127,8 @@ for ix in percs:
 
 mlab.show()
 
-print "VOLUMES:", volumes
-print "AREAS: ", areas
-print "V/A:", np.array(volumes)/np.array(areas)
+print volumes[0], areas[0], volumes[0]/areas[0]
+#print "VOLUMES:", volumes
+#print "AREAS: ", areas
+#print "V/A:", np.array(volumes)/np.array(areas)
 
