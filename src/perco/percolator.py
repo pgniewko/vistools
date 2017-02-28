@@ -36,7 +36,7 @@ mlab.plot3d([0, 0], [Ly, Ly], [0, Lz], color=black, tube_radius=0.1)
 mlab.plot3d([0, Lx], [0, 0], [Lz, Lz], color=black, tube_radius=0.1)
 mlab.plot3d([Lx, Lx], [0, Ly], [Lz, Lz], color=black, tube_radius=0.1)
 mlab.plot3d([0, 0], [0, Ly], [Lz, Lz], color=black, tube_radius=0.1)
-mlab.plot3d([0, Lx], [Ly, Lz], [Lz, Lz], color=black, tube_radius=0.1)
+mlab.plot3d([0, Lx], [Ly, Ly], [Lz, Lz], color=black, tube_radius=0.1)
 
 
 # BELOW CONSTRUCT  LATTICE
