@@ -26,7 +26,9 @@ for xyz_coor in frame_xyz:
         Y_real.append(xyz_coor[1])
         Z_real.append(xyz_coor[2])
 
-#mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,0,0))
+if len(sys.argv) > 3:
+    if sys.argv[3] == "all" or sys.argv[3] == "cells":
+        mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,0,0))
 
 black = (0,0,0)
 mlab.plot3d([0, Lx], [0, 0], [0, 0], color=black, tube_radius=0.1)
@@ -74,6 +76,7 @@ percs = percolating_clusters(labeled_array, X_dim, Y_dim, Z_dim)
 
 volumes = []
 areas = []
+counter = 0
 for ix in percs:
     if ix == 0:
         continue
@@ -84,7 +87,7 @@ for ix in percs:
  
     R = 0.0
     G = 1.0
-    B = 0.0
+    B = 0.1*counter
 
     for i in range(X_dim):
         for j in range(Y_dim):
@@ -94,6 +97,13 @@ for ix in percs:
                     Y_3d_c.append(j*epsy)
                     Z_3d_c.append(k*epsz)
 
-    mlab.points3d(X_3d_c, Y_3d_c, Z_3d_c, mode='cube', scale_factor=max( max(epsx, epsy),epsz ), opacity=1.0, color=(R,G,B))
+    if len(sys.argv) <= 3:
+        mlab.points3d(X_3d_c, Y_3d_c, Z_3d_c, mode='cube', scale_factor=max( max(epsx, epsy),epsz ), opacity=1.0, color=(R,G,B))
+
+    elif len(sys.argv) > 3:
+        if sys.argv[3] != "cells":
+            mlab.points3d(X_3d_c, Y_3d_c, Z_3d_c, mode='cube', scale_factor=max( max(epsx, epsy),epsz ), opacity=1.0, color=(R,G,B))
+    
+    counter += 0.1
 
 mlab.show()
