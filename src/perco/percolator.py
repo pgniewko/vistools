@@ -1,4 +1,8 @@
 #! /usr/bin/env python
+#
+# usage:
+#
+#
 
 import sys
 import numpy as np
@@ -22,7 +26,7 @@ for xyz_coor in frame_xyz:
         Y_real.append(xyz_coor[1])
         Z_real.append(xyz_coor[2])
 
-mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,0,0))
+#mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,0,0))
 
 black = (0,0,0)
 mlab.plot3d([0, Lx], [0, 0], [0, 0], color=black, tube_radius=0.1)
