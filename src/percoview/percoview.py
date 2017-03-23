@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 #
 # usage:
-#
+# $ ./percoview.py Vconst_16_fem_bend_PIDX_19_pbc.frame_4.HR.xyz  0.2 all
 #
 
 import sys
