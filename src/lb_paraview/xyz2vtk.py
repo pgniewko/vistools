@@ -242,6 +242,4 @@ if __name__ == "__main__":
         radii_.append(0.2)
 #        colors_.append()
 
-
-
     VTK_writer.snapshot(outfile, X_real, Y_real, Z_real, radii=radii_)
