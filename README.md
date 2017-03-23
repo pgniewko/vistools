@@ -3,9 +3,9 @@
 This library contains a set of tools that can be used to visualize percolation properties of packings, packings itself or change the format from xyt to  vtk:
 
 * boxview
-* lb\_paraview
-* perco    
-* viswire
+* xyz2vtk
+* percoview   
+* shellswire
 
 COPYRIGHT NOTICE
 ================
