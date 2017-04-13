@@ -6,6 +6,8 @@ This library contains a set of tools that can be used to visualize percolation p
 * xyz2vtk
 * percoview   
 * shellswire
+* dodecahedron
+* yeast\_vis 
 
 COPYRIGHT NOTICE
 ================
