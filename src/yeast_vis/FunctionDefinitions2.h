@@ -26,9 +26,6 @@ void drawEllipse2(void)
         y0 = yread[i][index];
         theta = thetaread[i][index];
 
-        //glColor3f(1.0, 0.0, 0.0);
-        //glVertex3f(x0, y0, 0.0);
-
         c = cos(theta);
         s = sin(theta);
 
@@ -36,7 +33,7 @@ void drawEllipse2(void)
         {
             if (bold)
             {
-                dr = 0.1;//0.0350001;
+                dr = 0.035;//0.0350001;
             }
 
             else
@@ -44,8 +41,6 @@ void drawEllipse2(void)
                 dr = 0.0;
             }
 
-            //for (ratio = 1.0 + 0.01; ratio >= 1.0 - dr; ratio -= 0.01)
-            //for (ratio = 1.0 + 0.01; ratio >= 0.0; ratio -= 0.01)
             for (ratio = 1.0 + 0.01; ratio >= 0.0; ratio -= 0.1)
             {
                 if ( ratio >= 1.0 - dr)
@@ -55,7 +50,6 @@ void drawEllipse2(void)
                 else
                 {
                     glColor3f(R[i][index], G[i][index], B[i][index]);
-                    //glColor3f(1.0, 0.0, 0.0);
                 }
 
                 x = ratio * sigx * cos(t + 0.00753);
@@ -77,7 +71,8 @@ void drawEllipse2(void)
 
     if (movie == 1)
     {
-        SaveScreenGrab(("frames/frame" + stringify(spin) + ".tga").c_str());
+//        SaveScreenGrab(("frames/frame" + stringify(spin) + ".tga").c_str());
+        SaveScreenGrab(("frames/frame" + stringify(spin) + ".jpeg").c_str());
         cout << "write image " << int(spin) << endl;
     }
 }

@@ -11,7 +11,8 @@ int main(int argc, char** argv)
     fstream file;
     int c;
     double L;
-
+    double phi;
+     
     movie = 0;
 
     glutInit(&argc, argv);
@@ -39,14 +40,13 @@ int main(int argc, char** argv)
 //      file.getline(line, 256);
 //      std::cout << line << std::endl;
 //      continue;
-        file >> N[j];
+        file >> N[j] >> phi;
 
-        cout << j << " " << N[j] << endl;
+        cout << j << " " << N[j] << " " << phi << endl;
 
         for (i = 1; i <= N[j]; i++)
         {
             file >> xread[i][j] >> yread[i][j] >> sig1read[i][j] >> c;
-
             if (c == 1)
             {
                 R[i][j] = 0.7578125; //0.0;
@@ -69,6 +69,7 @@ int main(int argc, char** argv)
             sig1read[i][j] = sig1read[i][j] / L;
             sig2read[i][j] = sig2read[i][j] / L;
         }
+        phi = 0.0;
     }
 
     glutDisplayFunc(drawEllipse2);
