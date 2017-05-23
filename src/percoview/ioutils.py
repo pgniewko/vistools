@@ -21,7 +21,6 @@ def build_27_boxes(traj_xyz, Lx, Ly, Lz, pbc=True):
                     zn = xyz_[2] + k*Lz
                     new_xyz_traj.append([xn, yn, zn])
     
-
     return new_xyz_traj
 
         
@@ -38,6 +37,19 @@ def cull_points(traj_xyz, Lx, Ly, Lz, epsx, epsy, epsz):
               new_xyz_traj.append( [x, y, z] )
 
     return new_xyz_traj
+
+
+def scale_coords(xyz_l, bx, by, bz, size_=10.0):
+
+    maxb = max( max(bx, by), bz)
+    scale = size_ / maxb
+    print "Scaling factor:", scale
+    for xyz in xyz_l:
+         xyz[0] *= scale
+         xyz[1] *= scale
+         xyz[2] *= scale
+
+    return xyz_l, scale
 
 
 def read_xyz_file_perco(file_name, eps, pbc=True):
@@ -58,12 +70,6 @@ def read_xyz_file_perco(file_name, eps, pbc=True):
             Ly = 2.0 * box_y
             Lz = 2.0 * box_z
 
-            X_dim = int(Lx / eps) + 1
-            Y_dim = int(Ly / eps) + 1
-            Z_dim = int(Lz / eps) + 1
-            epsx = Lx / (X_dim-1)
-            epsy = Ly / (Y_dim-1)
-            epsz = Lz / (Z_dim-1)
 
         else:
             X = float(pairs[1])
@@ -78,7 +84,18 @@ def read_xyz_file_perco(file_name, eps, pbc=True):
             Zn = pbc_image(Z, Lz)
             
             frame_xyz.append([Xn, Yn, Zn])
-         
+
+    frame_xyz, sc_ = scale_coords(frame_xyz, box_x, box_y, box_z)
+    Lx *= sc_
+    Ly *= sc_
+    Lz *= sc_
+    X_dim = int(Lx / eps) + 1
+    Y_dim = int(Ly / eps) + 1
+    Z_dim = int(Lz / eps) + 1
+    epsx = Lx / (X_dim-1)
+    epsy = Ly / (Y_dim-1)
+    epsz = Lz / (Z_dim-1)
+
     frame_xyz_ = build_27_boxes(frame_xyz, Lx, Ly, Lz)
     frame_xyz_ = cull_points(frame_xyz_, Lx, Ly, Lz, epsx, epsy, epsz)
 

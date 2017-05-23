@@ -8,6 +8,18 @@ def pbc_image(c, Lc):
 
     return nc 
 
+def scale_coords(xyz_l, bx, by, bz, size_=10.0):
+
+    maxb = max( max(bx, by), bz)
+    scale = size_/maxb
+    print "Scaling factor:", scale
+    for xyz in xyz_l:
+        xyz[0] *= scale
+        xyz[1] *= scale
+        xyz[2] *= scale
+
+    return xyz_l, scale
+
 def read_xyz_file(file_name):
     fin = open(file_name)
     frame_xyz = []
@@ -43,5 +55,8 @@ def read_xyz_file(file_name):
         
             if Xn != X or Yn != Y or Zn != Z:
                 frame_xyz_image.append([Xn, Yn, Zn])
-    
-    return frame_xyz, frame_xyz_image, Tot_n, box_x, box_y, box_z, Lx, Ly, Lz
+   
+    frame_xyz, sc = scale_coords(frame_xyz, box_x, box_y, box_z)
+    frame_xyz_image, sc = scale_coords(frame_xyz_image, box_x, box_y, box_z)
+
+    return frame_xyz, frame_xyz_image, Tot_n, box_x, box_y, box_z, sc* Lx, sc*Ly, sc*Lz

@@ -61,6 +61,19 @@ def pbc_image(c, Lc):
      return nc
 
 
+def scale_coords(xyz_l, bx, by, bz, size_=10.0):
+              
+    maxb = max( max(bx, by), bz)
+    scale = size_ / maxb
+    print "Scaling factor:", scale
+    for xyz in xyz_l:
+        xyz[0] *= scale
+        xyz[1] *= scale
+        xyz[2] *= scale
+        
+    return xyz_l, scale
+
+
 def get_registered_verts(filename):
     fin = open(filename)    
     vertex_map = {}
@@ -178,6 +191,10 @@ top_fname = sys.argv[2]
 color_flag = int(sys.argv[3])
 
 tra_hash, tra_xyz, Lx, Ly, Lz = get_coord_hash(file_name)
+tra_xyz, sc = scale_coords(tra_xyz, 0.5*Lx, 0.5*Ly, 0.5*Lz)
+Lx *= sc
+Ly *= sc
+Lz *= sc
 vertex_map, reversed_vertex_map = get_registered_verts(top_fname)
 triangles_list = get_triangles(top_fname)
 cells_bds, cells_tri = get_xyz_bds_fcts(triangles_list, reversed_vertex_map, tra_xyz, tra_hash, [1])
