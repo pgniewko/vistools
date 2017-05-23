@@ -8,7 +8,7 @@ def pbc_image(c, Lc):
 
     return nc 
 
-def scale_coords(xyz_l, bx, by, bz, size_=10.0):
+def scale_coords(xyz_l, bx, by, bz, size_=5.0):
 
     maxb = max( max(bx, by), bz)
     scale = size_/maxb

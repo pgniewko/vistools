@@ -39,7 +39,7 @@ def cull_points(traj_xyz, Lx, Ly, Lz, epsx, epsy, epsz):
     return new_xyz_traj
 
 
-def scale_coords(xyz_l, bx, by, bz, size_=10.0):
+def scale_coords(xyz_l, bx, by, bz, size_=5.0):
 
     maxb = max( max(bx, by), bz)
     scale = size_ / maxb
