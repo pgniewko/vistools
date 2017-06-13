@@ -1,4 +1,7 @@
 #! /bin/bash -x
+#
+# ~/bin/vistools/src/yeast_vis/tga2tif.sh . tif_disk
+
 
 cd `pwd`
 IN_PATH=$1
