@@ -26,6 +26,8 @@ for xyz_coor in frame_xyz:
         Y_real.append(xyz_coor[1])
         Z_real.append(xyz_coor[2])
 
+#mlab.figure( bgcolor="white" )
+
 if len(sys.argv) > 3:
     if sys.argv[3] == "all" or sys.argv[3] == "cells":
         mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,0,0))
