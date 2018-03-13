@@ -36,14 +36,15 @@ def DisplayCallback():
 
     frame = cfg.FRAMES[cfg.SPIN]
     RGB_ = frame.get_RGB()
+    outer_disk = []
     for i in range( frame.get_N() ):
         d0 = frame.get_D(i)
         x0 = frame.get_X(i)
         y0 = frame.get_Y(i)
-        #print x0, y0, cfg.SPIN, i, cfg.SPINSTEP
+        x0_= None
+        y0_= None
         c = 1.0
         s = 0.0
-        #rgb = frame.get_RGB(i)
         rgb = RGB_[i]
 
         glBegin(GL_TRIANGLES)
@@ -59,31 +60,27 @@ def DisplayCallback():
             
             glColor3f(rgb[0], rgb[1], rgb[2])
             glVertex3f(x0,y0,0)
-            glVertex3f(x1,y1,0) # * np.cos(t + dt), , 0)
+            glVertex3f(x1,y1,0)
             glVertex3f(x2,y2,0)
-#            for ratio in ratios:
-#                if ratio > (1.0-dr_):
-#                    glColor3f(0.5, 0.5, 0.5)
-#                else:
-#                    glColor3f(rgb[0], rgb[1], rgb[2])
 
+            if x1 > 1.0 or x2 > 1.0:
+                x0_ = x0 - 1.0
+            elif x1 < 0 or x2 < 0.0:
+                x0_ = x0_ + 1
+            
+            if y1 > 1.0 or y2 > 1.0:
+                y0_ = y0 - 1.0
+            elif y1 < 0 or y2 < 0.0:
+                y0_ = y0_ + 1
 
-#                x_ = ratio * d0 * np.cos(t + dt)
-#                y_ = ratio * d0 * np.sin(t + dt)
-#                x2 = x_ * c - y_ * s + x0;
-#                y2 = x_ * s + y_ * c + y0;
-               
-                # PBC
-                #corx = rint(x2);
-#                cory = int(y2)
-#                #y2 = y2 ;//- delry[index] * corx;
-#                y2 = y2 - int(y2)
-#                #x2 = x2 - delrx[index] * cory;
-#                x2 = x2 - int(x2)
-#                
-#                glVertex3f(x2, y2, 0.0);
-
-
+            if x0_ != None and y0_ != None:
+                outer_disk.append[x0_,y0_]
+            elif x0_ != None and y0_ == None:
+                outer_disk.append[x0_,y0]
+            elif x0_ == None and y0_ != None:
+                outer_disk.append[x0,y0_]
+                    
+           
 
         glEnd()
         if cfg.BOLD:
@@ -97,6 +94,9 @@ def DisplayCallback():
                 glColor3f(0.5, 0.5, 0.5)
                 glVertex3f(x1, y1, 0.0)
             glEnd()
+
+    outer_disk = list( set(outer_disk) )
+    print "outer_disks:", outer_disk
 
     glPopMatrix()
     glutSwapBuffers()
