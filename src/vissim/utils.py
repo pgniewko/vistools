@@ -24,13 +24,14 @@ def DisplayCallback():
     glClearColor(1.0, 1.0, 1.0, 1.0)
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT)
     glPushMatrix() 
-    
-    glPointSize(2); #set point size to 10 pixels
-    glBegin(GL_POINTS);
+#    glPointSize(2); #set point size to 10 pixels
+#    glBegin(GL_POINTS);
 
-    tl_    = np.linspace(0,2*np.pi,10,endpoint=True)
-    dt = (tl_[1]-tl_[0])/2.0
-    ratios = np.linspace(1.0,0.0,10,endpoint=True) 
+    tl_    = np.linspace(0,2*np.pi,32,endpoint=True)
+    tl_    = np.linspace(0,2*np.pi,20,endpoint=True)
+    tl_bold    = np.linspace(0,2*np.pi,128,endpoint=True)
+    dt = (tl_[1]-tl_[0])
+#    ratios = np.linspace(1.0,0.0,10,endpoint=True) 
 
 
     frame = cfg.FRAMES[cfg.SPIN]
@@ -44,39 +45,59 @@ def DisplayCallback():
         s = 0.0
         #rgb = frame.get_RGB(i)
         rgb = RGB_[i]
-        if cfg.BOLD:
-            dr_ = Frame.dr
-        else:
-            dr_ = 0.0
 
+        glBegin(GL_TRIANGLES)
         for t in tl_:
-            for ratio in ratios:
-                if ratio > (1.0-dr_):
-                    glColor3f(0.5, 0.5, 0.5)
-                else:
-                    glColor3f(rgb[0], rgb[1], rgb[2])
+            x_ = d0 * np.cos(t + dt)
+            y_ = d0 * np.sin(t + dt)
+            x1 = x_ * c - y_ * s + x0;
+            y1 = x_ * s + y_ * c + y0;
+            x_ = d0 * np.cos(t + 2*dt)
+            y_ = d0 * np.sin(t + 2*dt)
+            x2 = x_ * c - y_ * s + x0;
+            y2 = x_ * s + y_ * c + y0;
+            
+            glColor3f(rgb[0], rgb[1], rgb[2])
+            glVertex3f(x0,y0,0)
+            glVertex3f(x1,y1,0) # * np.cos(t + dt), , 0)
+            glVertex3f(x2,y2,0)
+#            for ratio in ratios:
+#                if ratio > (1.0-dr_):
+#                    glColor3f(0.5, 0.5, 0.5)
+#                else:
+#                    glColor3f(rgb[0], rgb[1], rgb[2])
 
 
-                x_ = ratio * d0 * np.cos(t + dt)
-                y_ = ratio * d0 * np.sin(t + dt)
-                x2 = x_ * c - y_ * s + x0;
-                y2 = x_ * s + y_ * c + y0;
-                #x2 -= 0.5;
-                #y2 -= 0.5;
+#                x_ = ratio * d0 * np.cos(t + dt)
+#                y_ = ratio * d0 * np.sin(t + dt)
+#                x2 = x_ * c - y_ * s + x0;
+#                y2 = x_ * s + y_ * c + y0;
+               
+                # PBC
                 #corx = rint(x2);
-                cory = int(y2)
-                #y2 = y2 ;//- delry[index] * corx;
-                y2 = y2 - int(y2)
-                #x2 = x2 - delrx[index] * cory;
-                
-                #print x2, x2 - int(x2)
-                x2 = x2 - int(x2)
-                
-                glVertex3f(x2, y2, 0.0);
+#                cory = int(y2)
+#                #y2 = y2 ;//- delry[index] * corx;
+#                y2 = y2 - int(y2)
+#                #x2 = x2 - delrx[index] * cory;
+#                x2 = x2 - int(x2)
+#                
+#                glVertex3f(x2, y2, 0.0);
 
 
 
-    glEnd()
+        glEnd()
+        if cfg.BOLD:
+            glPointSize(1)
+            glBegin(GL_POINTS)
+            for t in tl_bold:
+                x_ = d0 * np.cos(t + dt)
+                y_ = d0 * np.sin(t + dt)
+                x1 = x_ * c - y_ * s + x0
+                y1 = x_ * s + y_ * c + y0
+                glColor3f(0.5, 0.5, 0.5)
+                glVertex3f(x1, y1, 0.0)
+            glEnd()
+
     glPopMatrix()
     glutSwapBuffers()
 
