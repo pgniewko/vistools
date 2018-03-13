@@ -1,5 +1,4 @@
 import config as cfg
-from OpenGL._bytes import as_8_bit
 from PIL import Image
 from Frame import Frame
 
@@ -8,10 +7,6 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 
 import numpy as np
-
-
-#NPCOS = np.cos(THETAS)
-#NPSIN = np.sin(THETAS)
 
 def add_image(x0, y0, d):
     x = None
@@ -82,11 +77,6 @@ def DisplayCallback():
     glClearColor(1.0, 1.0, 1.0, 1.0)
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT)
     glPushMatrix() 
-#    glPointSize(2); #set point size to 10 pixels
-#    glBegin(GL_POINTS);
-
-#    ratios = np.linspace(1.0,0.0,10,endpoint=True) 
-
 
     frame = cfg.FRAMES[cfg.SPIN]
     RGB_ = frame.get_RGB()
@@ -102,47 +92,15 @@ def DisplayCallback():
             outer_disks.append([d0,ll[0],ll[1],rgb])
 
         draw_disk(d0,x0,y0,rgb)
-#        glBegin(GL_TRIANGLES)
-#        for t in tl_:
-#            x_ = d0 * np.cos(t + dt)
-#            y_ = d0 * np.sin(t + dt)
-#            x1 = x_ * c - y_ * s + x0;
-#            y1 = x_ * s + y_ * c + y0;
-#            x_ = d0 * np.cos(t + 2*dt)
-#            y_ = d0 * np.sin(t + 2*dt)
-#            x2 = x_ * c - y_ * s + x0;
-#            y2 = x_ * s + y_ * c + y0;
-            
-#            glColor3f(rgb[0], rgb[1], rgb[2])
-#            glVertex3f(x0,y0,0)
-#            glVertex3f(x1,y1,0)
-#            glVertex3f(x2,y2,0)
-
-        
-#        glEnd()
-#        if cfg.BOLD:
-#            glPointSize(1)
-#            glBegin(GL_POINTS)
-#            for t in tl_bold:
-#                x_ = d0 * np.cos(t + dt)
-#                y_ = d0 * np.sin(t + dt)
-#                x1 = x_ * c - y_ * s + x0
-#                y1 = x_ * s + y_ * c + y0
-#                glColor3f(0.5, 0.5, 0.5)
-#                glVertex3f(x1, y1, 0.0)
-#            glEnd()
     
-    #if len( outer_disks) > 0:
     for disk in outer_disks:
         draw_disk(disk[0], disk[1], disk[2], disk[3])
             
-#    print "outer_disks:", outer_disks
-
     glPopMatrix()
     glutSwapBuffers()
 
     if cfg.MOVIE:
-        ScreenShot( "./frames/frame_" + str(cfg.SPIN)+".png")
+        ScreenShot( "./frames/frame_%03d.png" % (cfg.SPIN) )
 
     
 def ReshapeCallback(w, h):
@@ -160,7 +118,6 @@ def ReshapeCallback(w, h):
 
 def KeyboardCallback(key, x, y):
     """
-
     """
 
     if key == 'm':
@@ -187,19 +144,14 @@ def KeyboardCallback(key, x, y):
     elif key == 'b':
         cfg.BOLD = 1 - cfg.BOLD
     elif key == 'w':
-        ScreenShot( "./frames/frame_%04d.png" % (cfg.SPIN) )
-    #elif key == '\x1b':             # ESC
-    elif key == as_8_bit( '\033' ):  # ESC
+        ScreenShot( "./frames/frame_%03d.png" % (cfg.SPIN) )
+    elif key == '\x1b':             # ESC
         import sys
         sys.exit()
     else:
         print("KEY NOT RECOGNIZED")
 
-   
-
     glutIdleFunc(SpinCallback)
-
-    
 
 
 def SpecialCallback():
@@ -207,12 +159,14 @@ def SpecialCallback():
     FOR NOW THERE IS NO SPECIAL CALLBACKS
     """
     pass
-            
+
+
 def MouseCallback(button, state, x, y):
     """
     FOR NOW THE MOUSE IS INACTIVE
     """
     pass
+
 
 def SpinCallback():
     """
@@ -226,20 +180,22 @@ def SpinCallback():
     elif cfg.SPIN < 0:
         cfg.SPIN = len(cfg.FRAMES)-1
     
-    
     glutPostRedisplay()
 
 
-#dump back buffer to image
 def ScreenShot(filename):
     """
     """
-    glReadBuffer(GL_FRONT)
-    pixels = glReadPixels(0,0,cfg.SIZEX,cfg.SIZEY,GL_RGB,GL_UNSIGNED_BYTE)
+    try:
+        glReadBuffer(GL_FRONT)
+        pixels = glReadPixels(0,0,cfg.SIZEX,cfg.SIZEY,GL_RGB,GL_UNSIGNED_BYTE)
                             
-    image = Image.fromstring("RGB", (cfg.SIZEX, cfg.SIZEY), pixels)
-    image = image.transpose( Image.FLIP_TOP_BOTTOM)
-    image.save(filename)
+        image = Image.fromstring("RGB", (cfg.SIZEX, cfg.SIZEY), pixels)
+        image = image.transpose( Image.FLIP_TOP_BOTTOM)
+        image.save(filename)
+    except IOError as err:
+        print(err.args)
+        print("Create a folder and then try agains.")
 
 
 
