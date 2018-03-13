@@ -9,13 +9,71 @@ from OpenGL.GL import *
 
 import numpy as np
 
-def _triangle(r_,g_,b_,x1,x2,x3):
+
+#NPCOS = np.cos(THETAS)
+#NPSIN = np.sin(THETAS)
+
+def add_image(x0, y0, d):
+    x = None
+    y = None
+    if x0+d > 1.0:
+        x = x0-1.0
+
+    if y0+d > 1.0:
+        y = y0-1.0
+
+    if x0-d < 0.0:
+        x = x0+1.0
+
+    if y0-d < 0.0:
+        y = y0+1.0
+
+    if x != None and y != None:
+        return [x,y]
+    elif x != None and y == None:
+        return [x,y0]
+    elif x == None and y != None:
+        return [x0,y]
+    else:
+        return []
+
+def draw_disk(d0,x0,y0,rgb):
+    THETAS = np.linspace(0,2*np.pi,20,endpoint=True)
+    THETAS_BOLD = np.linspace(0,2*np.pi,128,endpoint=True)
+    DT = (THETAS[1]-THETAS[0])
+    c = 1.0
+    s = 0.0
+
     glBegin(GL_TRIANGLES)
-    glColor3f(r_,g_,b_)
-    glVertex3f(x1[0],x1[1],x1[2])
-    glVertex3f(x2[0],x2[1],x2[2])
-    glVertex3f(x3[0],x3[1],x3[2])
+    for t in THETAS:
+        x_ = d0 * np.cos(t + DT)
+        y_ = d0 * np.sin(t + DT)
+        x1 = x_ * c - y_ * s + x0;
+        y1 = x_ * s + y_ * c + y0;
+        x_ = d0 * np.cos(t + 2*DT)
+        y_ = d0 * np.sin(t + 2*DT)
+        x2 = x_ * c - y_ * s + x0;
+        y2 = x_ * s + y_ * c + y0;
+            
+        glColor3f(rgb[0], rgb[1], rgb[2])
+        glVertex3f(x0,y0,0)
+        glVertex3f(x1,y1,0)
+        glVertex3f(x2,y2,0)
+
+        
     glEnd()
+
+    if cfg.BOLD:
+        glPointSize(1)
+        glBegin(GL_POINTS)
+        for t in THETAS_BOLD:
+            x_ = d0 * np.cos(t + DT)
+            y_ = d0 * np.sin(t + DT)
+            x1 = x_ * c - y_ * s + x0
+            y1 = x_ * s + y_ * c + y0
+            glColor3f(0.5, 0.5, 0.5)
+            glVertex3f(x1, y1, 0.0)
+        glEnd()
 
 def DisplayCallback():
     """
@@ -27,76 +85,58 @@ def DisplayCallback():
 #    glPointSize(2); #set point size to 10 pixels
 #    glBegin(GL_POINTS);
 
-    tl_    = np.linspace(0,2*np.pi,32,endpoint=True)
-    tl_    = np.linspace(0,2*np.pi,20,endpoint=True)
-    tl_bold    = np.linspace(0,2*np.pi,128,endpoint=True)
-    dt = (tl_[1]-tl_[0])
 #    ratios = np.linspace(1.0,0.0,10,endpoint=True) 
 
 
     frame = cfg.FRAMES[cfg.SPIN]
     RGB_ = frame.get_RGB()
-    outer_disk = []
+    outer_disks = []
     for i in range( frame.get_N() ):
         d0 = frame.get_D(i)
         x0 = frame.get_X(i)
         y0 = frame.get_Y(i)
-        x0_= None
-        y0_= None
-        c = 1.0
-        s = 0.0
         rgb = RGB_[i]
 
-        glBegin(GL_TRIANGLES)
-        for t in tl_:
-            x_ = d0 * np.cos(t + dt)
-            y_ = d0 * np.sin(t + dt)
-            x1 = x_ * c - y_ * s + x0;
-            y1 = x_ * s + y_ * c + y0;
-            x_ = d0 * np.cos(t + 2*dt)
-            y_ = d0 * np.sin(t + 2*dt)
-            x2 = x_ * c - y_ * s + x0;
-            y2 = x_ * s + y_ * c + y0;
+        ll = add_image(x0, y0, d0)
+        if len( ll ) > 0:
+            outer_disks.append([d0,ll[0],ll[1],rgb])
+
+        draw_disk(d0,x0,y0,rgb)
+#        glBegin(GL_TRIANGLES)
+#        for t in tl_:
+#            x_ = d0 * np.cos(t + dt)
+#            y_ = d0 * np.sin(t + dt)
+#            x1 = x_ * c - y_ * s + x0;
+#            y1 = x_ * s + y_ * c + y0;
+#            x_ = d0 * np.cos(t + 2*dt)
+#            y_ = d0 * np.sin(t + 2*dt)
+#            x2 = x_ * c - y_ * s + x0;
+#            y2 = x_ * s + y_ * c + y0;
             
-            glColor3f(rgb[0], rgb[1], rgb[2])
-            glVertex3f(x0,y0,0)
-            glVertex3f(x1,y1,0)
-            glVertex3f(x2,y2,0)
+#            glColor3f(rgb[0], rgb[1], rgb[2])
+#            glVertex3f(x0,y0,0)
+#            glVertex3f(x1,y1,0)
+#            glVertex3f(x2,y2,0)
 
-            if x1 > 1.0 or x2 > 1.0:
-                x0_ = x0 - 1.0
-            elif x1 < 0 or x2 < 0.0:
-                x0_ = x0_ + 1
+        
+#        glEnd()
+#        if cfg.BOLD:
+#            glPointSize(1)
+#            glBegin(GL_POINTS)
+#            for t in tl_bold:
+#                x_ = d0 * np.cos(t + dt)
+#                y_ = d0 * np.sin(t + dt)
+#                x1 = x_ * c - y_ * s + x0
+#                y1 = x_ * s + y_ * c + y0
+#                glColor3f(0.5, 0.5, 0.5)
+#                glVertex3f(x1, y1, 0.0)
+#            glEnd()
+    
+    #if len( outer_disks) > 0:
+    for disk in outer_disks:
+        draw_disk(disk[0], disk[1], disk[2], disk[3])
             
-            if y1 > 1.0 or y2 > 1.0:
-                y0_ = y0 - 1.0
-            elif y1 < 0 or y2 < 0.0:
-                y0_ = y0_ + 1
-
-            if x0_ != None and y0_ != None:
-                outer_disk.append[x0_,y0_]
-            elif x0_ != None and y0_ == None:
-                outer_disk.append[x0_,y0]
-            elif x0_ == None and y0_ != None:
-                outer_disk.append[x0,y0_]
-                    
-           
-
-        glEnd()
-        if cfg.BOLD:
-            glPointSize(1)
-            glBegin(GL_POINTS)
-            for t in tl_bold:
-                x_ = d0 * np.cos(t + dt)
-                y_ = d0 * np.sin(t + dt)
-                x1 = x_ * c - y_ * s + x0
-                y1 = x_ * s + y_ * c + y0
-                glColor3f(0.5, 0.5, 0.5)
-                glVertex3f(x1, y1, 0.0)
-            glEnd()
-
-    outer_disk = list( set(outer_disk) )
-    print "outer_disks:", outer_disk
+#    print "outer_disks:", outer_disks
 
     glPopMatrix()
     glutSwapBuffers()
@@ -130,6 +170,12 @@ def KeyboardCallback(key, x, y):
         cfg.SPINSTEP += 1
     elif key == '<':
         cfg.SPINSTEP -= 1
+    elif key == '+':
+        cfg.SPIN += 1
+        cfg.SPINSTEP = 0;
+    elif key == '-':
+        cfg.SPIN -= 1
+        cfg.SPINSTEP = 0;
     elif key == 's':
         cfg.SPINSTEP = 0
     elif key == 'f':
