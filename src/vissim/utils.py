@@ -8,29 +8,6 @@ from OpenGL.GL import *
 
 import numpy as np
 
-def calc_forces(x,y,d):
-    forces = []
-    N = len(x)
-    F_tot=0.0
-    contacts_n = 0
-    for i in range(N):
-        for j in range(N):
-            if i > j:
-                dx = x[i] - x[j]
-                dy = y[i] - y[j]
-                dij = (d[i] + d[j])/2.0
-                rij = np.sqrt( dx*dx + dy*dy )
-                if rij <= dij:
-                    f_ = 1.0 * (dij - rij) 
-                    forces.append( [f_, x[i], y[i], x[j], y[j]] )
-                    F_tot += f_
-
-    F_tot /= contacts_N
-    for el in forces:
-        pass
-        # scale all of the forces by average
- 
-
 def add_image(x0, y0, d):
     x = None
     y = None
@@ -93,6 +70,31 @@ def draw_disk(d0,x0,y0,rgb):
             glVertex3f(x1, y1, 0.0)
         glEnd()
 
+def draw_contacts_bonds(contacts, bonds):
+  
+    glLineWidth(2.5)
+    glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_LINES)
+    
+    for contact in contacts:
+        x1,y1 = contact[0], contact[1]
+        x2,y2 = contact[2], contact[3]
+        glVertex3f(x1,y1, 0.0)
+        glVertex3f(x2,y2, 0.0)
+    glEnd()
+    
+    glLineWidth(2.5)
+    glColor3f(0.0, 0.0, 1.0)
+    glBegin(GL_LINES)
+    
+    for bond in bonds:
+        x1,y1 = bond[0], bond[1]
+        x2,y2 = bond[2], bond[3]
+        glVertex3f(x1,y1, 0.0)
+        glVertex3f(x2,y2, 0.0)
+    glEnd()
+
+
 def DisplayCallback():
     """
     """
@@ -118,15 +120,20 @@ def DisplayCallback():
     
         for disk in outer_disks:
             draw_disk(disk[0], disk[1], disk[2], disk[3])
-            
+ 
+        if cfg.CONTACTS:
+            contacts, bonds = frame.calc_contacts_bonds()
+            draw_contacts_bonds(contacts, bonds)
+
         glPopMatrix()
         glutSwapBuffers()
 
         if cfg.MOVIE:
             ScreenShot( "./frames/frame_%03d.png" % (cfg.SPIN) )
+ 
 
     except KeyboardInterrupt:
-        print("\n*** Pressed Ctrl-C ... EXITING ***")
+        print("\n*** Pressed Ctrl-C: EXITING ***")
         import sys
         sys.exit(1)
         
@@ -171,6 +178,8 @@ def KeyboardCallback(key, x, y):
         cfg.SPINSTEP = 0
     elif key == 'b':
         cfg.BOLD = 1 - cfg.BOLD
+    elif key == 'c':
+        cfg.CONTACTS = 1 - cfg.CONTACTS
     elif key == 'w':
         ScreenShot( "./frames/frame_%03d.png" % (cfg.SPIN) )
     elif key == '\x1b':             # ESC

@@ -55,14 +55,23 @@ class Frame:
     def get_N(self):
         return self.N_
 
-    def get_D(self,i):
-        return self.d_[i] / self.L_
+    def get_D(self,i=None):
+        if i == None:
+            return [dval/self.L_ for dval in self.d_]
+        else:
+            return self.d_[i] / self.L_
     
-    def get_X(self,i):
-        return self.x_[i] / self.L_
+    def get_X(self,i=None):
+        if i == None:
+            return [xval/self.L_ for xval in self.x_]
+        else:
+            return self.x_[i] / self.L_
     
-    def get_Y(self,i):
-        return self.y_[i] / self.L_
+    def get_Y(self,i=None):
+        if i == None:
+            return [yval/self.L_ for yval in self.y_]
+        else:
+            return self.y_[i] / self.L_
 
     def get_RGB(self,i=None):
         if i == None:
@@ -77,5 +86,30 @@ class Frame:
         out_str += str( len( self.x_ ) ) + " "
 
         return out_str
+
+    def calc_contacts_bonds(self):
+         contacts = []
+         bonds = []
+         for i in range(self.N_):
+             xi = self.get_X(i)
+             yi = self.get_Y(i)
+             di = self.get_D(i)
+             for j in range(self.N_):
+                 xj = self.get_X(j)
+                 yj = self.get_Y(j)
+                 dj = self.get_D(j)
+                 if j-i == 1 and i%2 == 0:
+                     bonds.append([xi,yi,xj,yj])
+     
+                 elif j > i:
+                     dx = xi-xj 
+                     dy = yi-yj 
+                     dij = di+dj
+                     rij2 = dx*dx + dy*dy
+                     if rij2 < dij*dij:
+                          contacts.append( [xi,yi,xj,yj] )
+         
+         return contacts,bonds
+
 
 
