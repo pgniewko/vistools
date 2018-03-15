@@ -8,6 +8,29 @@ from OpenGL.GL import *
 
 import numpy as np
 
+def calc_forces(x,y,d):
+    forces = []
+    N = len(x)
+    F_tot=0.0
+    contacts_n = 0
+    for i in range(N):
+        for j in range(N):
+            if i > j:
+                dx = x[i] - x[j]
+                dy = y[i] - y[j]
+                dij = (d[i] + d[j])/2.0
+                rij = np.sqrt( dx*dx + dy*dy )
+                if rij <= dij:
+                    f_ = 1.0 * (dij - rij) 
+                    forces.append( [f_, x[i], y[i], x[j], y[j]] )
+                    F_tot += f_
+
+    F_tot /= contacts_N
+    for el in forces:
+        pass
+        # scale all of the forces by average
+ 
+
 def add_image(x0, y0, d):
     x = None
     y = None
@@ -73,35 +96,40 @@ def draw_disk(d0,x0,y0,rgb):
 def DisplayCallback():
     """
     """
+    try: 
+        glClearColor(1.0, 1.0, 1.0, 1.0)
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT)
+        glPushMatrix() 
+
+        frame = cfg.FRAMES[cfg.SPIN]
+        RGB_ = frame.get_RGB()
+        outer_disks = []
+        for i in range( frame.get_N() ):
+            d0 = frame.get_D(i)
+            x0 = frame.get_X(i)
+            y0 = frame.get_Y(i)
+            rgb = RGB_[i]
+
+            ll = add_image(x0, y0, d0)
+            if len( ll ) > 0:
+                outer_disks.append([d0,ll[0],ll[1],rgb])
+
+            draw_disk(d0,x0,y0,rgb)
     
-    glClearColor(1.0, 1.0, 1.0, 1.0)
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT)
-    glPushMatrix() 
-
-    frame = cfg.FRAMES[cfg.SPIN]
-    RGB_ = frame.get_RGB()
-    outer_disks = []
-    for i in range( frame.get_N() ):
-        d0 = frame.get_D(i)
-        x0 = frame.get_X(i)
-        y0 = frame.get_Y(i)
-        rgb = RGB_[i]
-
-        ll = add_image(x0, y0, d0)
-        if len( ll ) > 0:
-            outer_disks.append([d0,ll[0],ll[1],rgb])
-
-        draw_disk(d0,x0,y0,rgb)
-    
-    for disk in outer_disks:
-        draw_disk(disk[0], disk[1], disk[2], disk[3])
+        for disk in outer_disks:
+            draw_disk(disk[0], disk[1], disk[2], disk[3])
             
-    glPopMatrix()
-    glutSwapBuffers()
+        glPopMatrix()
+        glutSwapBuffers()
 
-    if cfg.MOVIE:
-        ScreenShot( "./frames/frame_%03d.png" % (cfg.SPIN) )
+        if cfg.MOVIE:
+            ScreenShot( "./frames/frame_%03d.png" % (cfg.SPIN) )
 
+    except KeyboardInterrupt:
+        print("\n*** Pressed Ctrl-C ... EXITING ***")
+        import sys
+        sys.exit(1)
+        
     
 def ReshapeCallback(w, h):
     """

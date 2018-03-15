@@ -98,6 +98,5 @@ if __name__ == "__main__":
     fname = sys.argv[1]
     L = float(sys.argv[2])
     read_frames(fname, L)
- 
     display_sim()
     
