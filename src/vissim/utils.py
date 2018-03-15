@@ -1,12 +1,13 @@
 import config as cfg
 from PIL import Image
-from Frame import Frame
+#from Frame import Frame
 
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 
 import numpy as np
+
 
 def add_image(x0, y0, d):
     x = None
@@ -24,13 +25,13 @@ def add_image(x0, y0, d):
         y = y0+1.0
 
     if x != None and y != None:
-        return [x,y]
+        return 1,[[x,y],[x,y0],[x0,y]]
     elif x != None and y == None:
-        return [x,y0]
+        return 2,[[x,y0]]
     elif x == None and y != None:
-        return [x0,y]
+        return 3,[[x0,y]]
     else:
-        return []
+        return 0,[]
 
 def draw_disk(d0,x0,y0,rgb):
     THETAS = np.linspace(0,2*np.pi,20,endpoint=True)
@@ -112,9 +113,10 @@ def DisplayCallback():
             y0 = frame.get_Y(i)
             rgb = RGB_[i]
 
-            ll = add_image(x0, y0, d0)
+            flag,ll = add_image(x0, y0, d0)
             if len( ll ) > 0:
-                outer_disks.append([d0,ll[0],ll[1],rgb])
+                for el_ll in ll:    
+                    outer_disks.append([d0,el_ll[0],el_ll[1],rgb])
 
             draw_disk(d0,x0,y0,rgb)
     

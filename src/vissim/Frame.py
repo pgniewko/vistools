@@ -2,6 +2,8 @@
 WRITE A CLASS DOCUMENTATION
 """
 
+from utils import add_image
+
 class Frame:
     
     dr = 0.05
@@ -90,10 +92,48 @@ class Frame:
     def calc_contacts_bonds(self):
          contacts = []
          bonds = []
+         bondimages = []
+         images = []
          for i in range(self.N_):
              xi = self.get_X(i)
              yi = self.get_Y(i)
              di = self.get_D(i)
+             fi, li = add_image(xi, yi, 2*di)
+             if fi != 0:
+                 if i%2==0: # GET DAUGHTER LOBE
+                     xi2 = self.get_X(i+1)
+                     yi2 = self.get_Y(i+1)
+                     di2 = self.get_D(i+1)
+                     rgb2= self.get_RGB(i+1) 
+                 else : # GET MOTHER LOBE
+                     xi2 = self.get_X(i-1)
+                     yi2 = self.get_Y(i-1)
+                     di2 = self.get_D(i-1)
+
+                 
+                 if fi == 1: 
+                     el0 = li[0]
+                     el1 = li[1]
+                     el2 = li[2]
+                     images.append( [el0[0], el0[1], di ] )
+                     images.append( [xi2+(el0[0]-xi), yi2+(el0[1]-yi), di2] )
+
+                     images.append( [el1[0], el1[1], di ] )
+                     images.append( [xi2+(el1[0]-xi), yi2, di2] )
+                     
+                     images.append( [el2[0], el2[1], di ] )
+                     images.append( [xi2, yi2+(el2[1]-yi), di2] )
+                 elif fi == 2:
+                      el = li[0]
+                      images.append( [el[0], el[1], di ] )
+                      images.append( [xi2+(el[0]-xi), yi2, di2] )
+                 elif fi == 3:
+                      el = li[0]
+                      images.append( [el[0], el[1], di ] )
+                      images.append( [xi2, yi2+(el[1]-yi), di2] )
+
+
+             
              for j in range(self.N_):
                  xj = self.get_X(j)
                  yj = self.get_Y(j)
@@ -101,14 +141,52 @@ class Frame:
                  if j-i == 1 and i%2 == 0:
                      bonds.append([xi,yi,xj,yj])
      
-                 elif j > i:
+                 elif  j > i:
+                     
                      dx = xi-xj 
                      dy = yi-yj 
                      dij = di+dj
                      rij2 = dx*dx + dy*dy
                      if rij2 < dij*dij:
                           contacts.append( [xi,yi,xj,yj] )
-         
+       
+         for i in range(len(images)):
+             xi = images[i][0]
+             yi = images[i][1]
+             di = images[i][2]
+             for j in range(len(images)):
+                 xj = images[j][0]
+                 yj = images[j][1]
+                 dj = images[j][2]
+
+                 if j-i == 1 and i%2 == 0:
+                     bonds.append([xi,yi,xj,yj])
+                 else: #if j > i:
+                     dx = xi-xj 
+                     dy = yi-yj 
+                     dij = di+dj
+                     rij2 = dx*dx + dy*dy
+                     if rij2 < dij*dij:
+                          contacts.append( [xi,yi,xj,yj] )
+
+         for i in range(len(images)):
+             xi = images[i][0]
+             yi = images[i][1]
+             di = images[i][2]
+             for j in range(self.N_):
+                 xj = self.get_X(j)
+                 yj = self.get_Y(j)
+                 dj = self.get_D(j)
+                 
+                 dx = xi-xj 
+                 dy = yi-yj 
+                 dij = di+dj
+                 rij2 = dx*dx + dy*dy
+                 if rij2 < dij*dij:
+                     contacts.append( [xi,yi,xj,yj] )
+
+
+
          return contacts,bonds
 
 
