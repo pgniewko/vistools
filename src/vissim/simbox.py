@@ -3,8 +3,7 @@
 DOCUMENTATION
 """
 
-
-_version__ = '0.0.1'
+_version__ = '0.0.2'
 __date__   = '2018/12/03'
 
 import sys
@@ -12,7 +11,7 @@ import sys
 from Frame import Frame
 from utils import *
 import config as cfg
-# OpenGL imports for python
+
 try:
     from OpenGL.GL import *
     from OpenGL.GLU import *
@@ -97,6 +96,11 @@ def init():
 if __name__ == "__main__":
     fname = sys.argv[1]
     L = float(sys.argv[2])
+    if len(sys.argv) > 3:
+        cfg.DGAMMA = float(sys.argv[3])
+
+
     read_frames(fname, L)
     display_sim()
-    
+
+
