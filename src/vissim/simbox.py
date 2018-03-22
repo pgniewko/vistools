@@ -67,7 +67,6 @@ def display_sim(sizex_=720,sizey_=720,initx=-1,inity=-1):
     glutInit(sys.argv)
 
     # Set OpenGL display mode
-    #glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH)
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB)
 
     # Set the Window size and position
