@@ -8,10 +8,17 @@ from OpenGL.GL import *
 
 import numpy as np
 
-
 def add_image(x0, y0, d):
     x = None
     y = None
+   
+    # EDWARDS-LEE CELL
+    if y0+d > 1.0:
+       x0 -= cfg.SPIN*cfg.DGAMMA
+    if y0-d < 0.0:
+       x0 += cfg.SPIN*cfg.DGAMMA
+        
+    
     if x0+d > 1.0:
         x = x0-1.0
 
@@ -50,7 +57,7 @@ def draw_disk(d0,x0,y0,rgb):
         y_ = d0 * np.sin(t + 2*DT)
         x2 = x_ * c - y_ * s + x0;
         y2 = x_ * s + y_ * c + y0;
-            
+        
         glColor3f(rgb[0], rgb[1], rgb[2])
         glVertex3f(x0,y0,0)
         glVertex3f(x1,y1,0)

@@ -6,8 +6,6 @@ from utils import add_image
 
 class Frame:
     
-    dr = 0.05
-
     def __init__(self,N_,phi_,x_,y_,d_,color_,L_=10.0): #,P_=[],k_=[]):
         try:
             self.N_     = N_
