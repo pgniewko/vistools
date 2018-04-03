@@ -1,6 +1,5 @@
 import config as cfg
 from PIL import Image
-#from Frame import Frame
 
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
@@ -9,7 +8,7 @@ from OpenGL.GL import *
 import numpy as np
 
 def add_image_new(x0, y0):
-    eps = 0.2
+    eps = 0.1
     new_xy = []
     for i in [-1.,0.,1.]:
         for j in [-1.,0.,1.]:
@@ -23,38 +22,6 @@ def add_image_new(x0, y0):
 
     return new_xy
 
-#def add_image(x0, y0, d):
-#    x = None
-#    y = None
-#   
-#    # EDWARDS-LEE CELL
-#
-#    if y0+d > 1.0:
-#       x0 -= cfg.SPIN*cfg.DGAMMA
-#    if y0-d < 0.0:
-#       x0 += cfg.SPIN*cfg.DGAMMA
-#        
-#    
-#    if x0+d > 1.0:
-#        x = x0-1.0
-#
-#    if y0+d > 1.0:
-#        y = y0-1.0
-#
-#    if x0-d < 0.0:
-#        x = x0+1.0
-#
-#    if y0-d < 0.0:
-#        y = y0+1.0
-#
-#    if x != None and y != None:
-#        return 1,[[x,y],[x,y0],[x0,y]]
-#    elif x != None and y == None:
-#        return 2,[[x,y0]]
-#    elif x == None and y != None:
-#        return 3,[[x0,y]]
-#    else:
-#        return 0,[]
 
 def draw_disk(d0,x0,y0,rgb):
     THETAS = np.linspace(0,2*np.pi,20,endpoint=True)

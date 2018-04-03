@@ -6,7 +6,7 @@ from utils import add_image_new
 
 class Frame:
     
-    def __init__(self,N_,phi_,x_,y_,d_,color_,L_=10.0): #,P_=[],k_=[]):
+    def __init__(self,N_,phi_,x_,y_,d_,color_,L_=10.0):
         try:
             self.N_     = N_
             self.phi_   = phi_
@@ -91,46 +91,10 @@ class Frame:
          contacts = []
          bonds = []
          bondimages = []
-         images = self._add_image_particles()
          for i in range(self.N_):
              xi = self.get_X(i)
              yi = self.get_Y(i)
              di = self.get_D(i)
-#             fi, li = add_image(xi, yi, 2*di)
-#             if fi != 0:
-#                 if i%2==0: # GET DAUGHTER LOBE
-#                     xi2 = self.get_X(i+1)
-#                     yi2 = self.get_Y(i+1)
-#                     di2 = self.get_D(i+1)
-#                     rgb2= self.get_RGB(i+1) 
-#                 else : # GET MOTHER LOBE
-#                     xi2 = self.get_X(i-1)
-#                     yi2 = self.get_Y(i-1)
-#                     di2 = self.get_D(i-1)
-#
-#                 
-#                 if fi == 1: 
-#                     el0 = li[0]
-#                     el1 = li[1]
-#                     el2 = li[2]
-#                     images.append( [el0[0], el0[1], di ] )
-#                     images.append( [xi2+(el0[0]-xi), yi2+(el0[1]-yi), di2] )
-#
-#                     images.append( [el1[0], el1[1], di ] )
-#                     images.append( [xi2+(el1[0]-xi), yi2, di2] )
-#                     
-#                     images.append( [el2[0], el2[1], di ] )
-#                     images.append( [xi2, yi2+(el2[1]-yi), di2] )
-#                 elif fi == 2:
-#                      el = li[0]
-#                      images.append( [el[0], el[1], di ] )
-#                      images.append( [xi2+(el[0]-xi), yi2, di2] )
-#                 elif fi == 3:
-#                      el = li[0]
-#                      images.append( [el[0], el[1], di ] )
-#                      images.append( [xi2, yi2+(el[1]-yi), di2] )
-
-
              
              for j in range(self.N_):
                  xj = self.get_X(j)
@@ -148,6 +112,8 @@ class Frame:
                      if rij2 < dij*dij:
                           contacts.append( [xi,yi,xj,yj] )
        
+         
+         images = self._add_image_particles()
          for i in range(len(images)):
              xi = images[i][0]
              yi = images[i][1]
@@ -183,8 +149,6 @@ class Frame:
                  if rij2 < dij*dij:
                      contacts.append( [xi,yi,xj,yj] )
 
-
-
          return contacts,bonds
 
 
@@ -204,10 +168,10 @@ class Frame:
                 dx = el[0]-x0
                 dy = el[1]-y0
                 imgs.append( [el[0],el[1],d0] )
-                imgs.append( [xb+dx,yb+dx,db] )
+                imgs.append( [xb+dx,yb+dy,db] )
                 
-        return []
 
+        return imgs
 
 
 
