@@ -130,24 +130,22 @@ def DisplayCallback():
         frame = cfg.FRAMES[cfg.SPIN]
         RGB_ = frame.get_RGB()
         outer_disks = []
-        OUTER_COUNTER=0
         for i in range( frame.get_N() ):
             d0 = frame.get_D(i)
             x0 = frame.get_X(i)
             y0 = frame.get_Y(i)
             rgb = RGB_[i]
 
-            #flag,ll = add_image(x0, y0, d0)
             ll = add_image_new(x0, y0)
             if len( ll ) > 0:
-                for el_ll in ll:    
-                    #outer_disks.append([d0,el_ll[0],el_ll[1],rgb])
-                    outer_disks.append([d0,el_ll[0],el_ll[1], [0,1,0]])
-                    OUTER_COUNTER+=1
+                for el_ll in ll: 
+                    if cfg.PBC:
+                        outer_disks.append([d0,el_ll[0],el_ll[1],rgb])
+                    else:
+                        outer_disks.append([d0,el_ll[0],el_ll[1], [0,1,0]])
 
             draw_disk(d0,x0,y0,rgb)
     
-#        print "OUTER_COUNTER:", OUTER_COUNTER
         for disk in outer_disks:
             draw_disk(disk[0], disk[1], disk[2], disk[3])
 
@@ -209,6 +207,8 @@ def KeyboardCallback(key, x, y):
         cfg.SPINSTEP = 0
     elif key == 'b':
         cfg.BOLD = 1 - cfg.BOLD
+    elif key == 'p':
+        cfg.PBC = 1 - cfg.PBC
     elif key == 'c':
         cfg.CONTACTS = 1 - cfg.CONTACTS
     elif key == 'w':
