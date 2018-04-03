@@ -8,37 +8,53 @@ from OpenGL.GL import *
 
 import numpy as np
 
-def add_image(x0, y0, d):
-    x = None
-    y = None
-   
-    # EDWARDS-LEE CELL
-    if y0+d > 1.0:
-       x0 -= cfg.SPIN*cfg.DGAMMA
-    if y0-d < 0.0:
-       x0 += cfg.SPIN*cfg.DGAMMA
-        
-    
-    if x0+d > 1.0:
-        x = x0-1.0
+def add_image_new(x0, y0):
+    eps = 0.2
+    new_xy = []
+    for i in [-1.,0.,1.]:
+        for j in [-1.,0.,1.]:
+            if i != 0 or j != 0:
+                x = x0 + i + j*cfg.SPIN*cfg.DGAMMA
+                y = y0 + j 
 
-    if y0+d > 1.0:
-        y = y0-1.0
+                if x > -eps and x < 1.+eps:
+                    if y > -eps and y < 1.+eps:
+                        new_xy.append( [x,y] )
 
-    if x0-d < 0.0:
-        x = x0+1.0
+    return new_xy
 
-    if y0-d < 0.0:
-        y = y0+1.0
-
-    if x != None and y != None:
-        return 1,[[x,y],[x,y0],[x0,y]]
-    elif x != None and y == None:
-        return 2,[[x,y0]]
-    elif x == None and y != None:
-        return 3,[[x0,y]]
-    else:
-        return 0,[]
+#def add_image(x0, y0, d):
+#    x = None
+#    y = None
+#   
+#    # EDWARDS-LEE CELL
+#
+#    if y0+d > 1.0:
+#       x0 -= cfg.SPIN*cfg.DGAMMA
+#    if y0-d < 0.0:
+#       x0 += cfg.SPIN*cfg.DGAMMA
+#        
+#    
+#    if x0+d > 1.0:
+#        x = x0-1.0
+#
+#    if y0+d > 1.0:
+#        y = y0-1.0
+#
+#    if x0-d < 0.0:
+#        x = x0+1.0
+#
+#    if y0-d < 0.0:
+#        y = y0+1.0
+#
+#    if x != None and y != None:
+#        return 1,[[x,y],[x,y0],[x0,y]]
+#    elif x != None and y == None:
+#        return 2,[[x,y0]]
+#    elif x == None and y != None:
+#        return 3,[[x0,y]]
+#    else:
+#        return 0,[]
 
 def draw_disk(d0,x0,y0,rgb):
     THETAS = np.linspace(0,2*np.pi,20,endpoint=True)
@@ -114,22 +130,27 @@ def DisplayCallback():
         frame = cfg.FRAMES[cfg.SPIN]
         RGB_ = frame.get_RGB()
         outer_disks = []
+        OUTER_COUNTER=0
         for i in range( frame.get_N() ):
             d0 = frame.get_D(i)
             x0 = frame.get_X(i)
             y0 = frame.get_Y(i)
             rgb = RGB_[i]
 
-            flag,ll = add_image(x0, y0, d0)
+            #flag,ll = add_image(x0, y0, d0)
+            ll = add_image_new(x0, y0)
             if len( ll ) > 0:
                 for el_ll in ll:    
-                    outer_disks.append([d0,el_ll[0],el_ll[1],rgb])
+                    #outer_disks.append([d0,el_ll[0],el_ll[1],rgb])
+                    outer_disks.append([d0,el_ll[0],el_ll[1], [0,1,0]])
+                    OUTER_COUNTER+=1
 
             draw_disk(d0,x0,y0,rgb)
     
+#        print "OUTER_COUNTER:", OUTER_COUNTER
         for disk in outer_disks:
             draw_disk(disk[0], disk[1], disk[2], disk[3])
- 
+
         if cfg.CONTACTS:
             contacts, bonds = frame.calc_contacts_bonds()
             draw_contacts_bonds(contacts, bonds)
@@ -154,7 +175,8 @@ def ReshapeCallback(w, h):
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0)
+    #glOrtho(-0.3, 1.3, -0.3, 1.3, -1.0, 1.0)
+    glOrtho(0., 1., 0., 1., -1.0, 1.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
