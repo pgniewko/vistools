@@ -140,8 +140,10 @@ def ReshapeCallback(w, h):
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    #glOrtho(-0.3, 1.3, -0.3, 1.3, -1.0, 1.0)
-    glOrtho(0., 1., 0., 1., -1.0, 1.0)
+    if cfg.BIGSCREEN == 1:
+        glOrtho(-0.3, 1.3, -0.3, 1.3, -1.0, 1.0)
+    else:
+        glOrtho(0., 1., 0., 1., -1.0, 1.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
