@@ -1,8 +1,4 @@
 #! /usr/bin/env python
-#
-# usage:
-# $ ./shellswire.py Vconst_16_fem_bend_PIDX_1_pbc.frame_1.xyz Vconst_16_fem_bend_PIDX_1_pbc.top 0
-#
 
 import sys
 import numpy as np
