@@ -4,7 +4,6 @@ This library contains a set of tools that can be used to visualize packings and 
 
 * `boxview` 
 * `dodecahedron` 
-* `lb-paraview` 
 * `xyz2vtk`  
 * `percoview`    
 * `shellswire`

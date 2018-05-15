@@ -34,7 +34,7 @@ def read_frames(file_name, L):
 
     for line in fin:
         pairs = line.split()
-        if len(pairs) == 2:
+        if len(pairs) == 3:
             frame = Frame(N,phi,x,y,d,c,L_=L)
             x = []
             y = []

@@ -25,7 +25,7 @@ def add_image_new(x0, y0):
 
 def draw_disk(d0,x0,y0,rgb):
     THETAS = np.linspace(0,2*np.pi,20,endpoint=True)
-    THETAS_BOLD = np.linspace(0,2*np.pi,128,endpoint=True)
+    THETAS_BOLD = np.linspace(0,2*np.pi,360,endpoint=True)
     DT = (THETAS[1]-THETAS[0])
     c = 1.0
     s = 0.0
@@ -50,7 +50,7 @@ def draw_disk(d0,x0,y0,rgb):
     glEnd()
 
     if cfg.BOLD:
-        glPointSize(1)
+        glPointSize(2)
         glBegin(GL_POINTS)
         for t in THETAS_BOLD:
             x_ = d0 * np.cos(t + DT)
@@ -97,6 +97,10 @@ def DisplayCallback():
         frame = cfg.FRAMES[cfg.SPIN]
         RGB_ = frame.get_RGB()
         outer_disks = []
+        
+        if cfg.UNC:
+            contacts, bonds, uncs = frame.calc_contacts_bonds()
+        
         for i in range( frame.get_N() ):
             d0 = frame.get_D(i)
             x0 = frame.get_X(i)
@@ -111,14 +115,19 @@ def DisplayCallback():
                     else:
                         outer_disks.append([d0,el_ll[0],el_ll[1], [0,1,0]])
 
+            if cfg.UNC:
+                if uncs[i] == 0 and i%2==1:
+                    rgb = [1,0.647,0]
+       
             draw_disk(d0,x0,y0,rgb)
     
         for disk in outer_disks:
             draw_disk(disk[0], disk[1], disk[2], disk[3])
 
         if cfg.CONTACTS:
-            contacts, bonds = frame.calc_contacts_bonds()
+            contacts, bonds, uncs = frame.calc_contacts_bonds()
             draw_contacts_bonds(contacts, bonds)
+
 
         glPopMatrix()
         glutSwapBuffers()
@@ -178,6 +187,8 @@ def KeyboardCallback(key, x, y):
         cfg.BOLD = 1 - cfg.BOLD
     elif key == 'p':
         cfg.PBC = 1 - cfg.PBC
+    elif key == 'u':
+        cfg.UNC = 1 - cfg.UNC
     elif key == 'c':
         cfg.CONTACTS = 1 - cfg.CONTACTS
     elif key == 'w':

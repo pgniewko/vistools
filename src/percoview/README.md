@@ -3,7 +3,7 @@ Find a percolating cluster and plot both shells and the percolating cluster.
 
 ## USAGE ###
 
-`./percoview.py ../../assets/data/packing.xyz 0.2 all`
+`./percoview.py ../../assets/data/packing.hr.xyz 0.2 all`
 
 ![Shells and the percolating cluster](../../assets/img/percolation.png)
 

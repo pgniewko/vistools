@@ -2,6 +2,7 @@
 WRITE A CLASS DOCUMENTATION
 """
 
+import numpy as np
 from utils import add_image_new
 
 class Frame:
@@ -90,6 +91,7 @@ class Frame:
     def calc_contacts_bonds(self):
          contacts = []
          bonds = []
+         uncs = np.zeros(self.N_)
          bondimages = []
          for i in range(self.N_):
              xi = self.get_X(i)
@@ -111,6 +113,8 @@ class Frame:
                      rij2 = dx*dx + dy*dy
                      if rij2 < dij*dij:
                           contacts.append( [xi,yi,xj,yj] )
+                          uncs[i] = 1   
+                          uncs[j] = 1   
        
          
          images = self._add_image_particles()
@@ -149,7 +153,7 @@ class Frame:
                  if rij2 < dij*dij:
                      contacts.append( [xi,yi,xj,yj] )
 
-         return contacts,bonds
+         return contacts,bonds,uncs
 
 
     def _add_image_particles(self):

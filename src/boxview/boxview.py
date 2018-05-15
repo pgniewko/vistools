@@ -1,9 +1,4 @@
 #! /usr/bin/env python
-#
-# usage:
-# $./boxview.py Vconst_16_fem_bend_PIDX_19_pbc.frame_4.xyz  0.2
-# 
-
 
 import sys
 from mayavi import mlab
