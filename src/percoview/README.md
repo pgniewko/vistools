@@ -5,7 +5,7 @@ Find a percolating cluster and plot both shells and the percolating cluster.
 
 `./percoview.py ../../assets/data/packing.xyz 0.2 all`
 
-![Dodecahedron](../../assets/img/packings.png)
+![Shells and the percolating cluster](../../assets/img/percolation.png)
 
 COPYRIGHT NOTICE
 ================
