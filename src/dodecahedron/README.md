@@ -5,7 +5,7 @@ Picture of a dodecahedron. Red dots represent the center of the sides.
 
 `./dod_fcts.py`
 
-![Dodecahedron](../../assets/imgs/dodecahedron.png)
+![Dodecahedron](../../assets/img/dodecahedron.png)
 
 COPYRIGHT NOTICE
 ================
