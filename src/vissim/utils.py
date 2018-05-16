@@ -63,7 +63,7 @@ def draw_disk(d0,x0,y0,rgb):
 
 def draw_contacts_bonds(contacts, bonds):
   
-    glLineWidth(2.5)
+    glLineWidth(3.0)
     glColor3f(1.0, 0.0, 0.0)
     glBegin(GL_LINES)
     
@@ -74,8 +74,8 @@ def draw_contacts_bonds(contacts, bonds):
         glVertex3f(x2,y2, 0.0)
     glEnd()
     
-    glLineWidth(2.5)
-    glColor3f(0.0, 0.0, 1.0)
+    glLineWidth(3.0)
+    glColor3f(.5, .5, .5)
     glBegin(GL_LINES)
     
     for bond in bonds:
@@ -117,7 +117,7 @@ def DisplayCallback():
 
             if cfg.UNC:
                 if uncs[i] == 0 and i%2==1:
-                    rgb = [1,0.647,0]
+                    rgb = [1,0.78,0]
        
             draw_disk(d0,x0,y0,rgb)
     
