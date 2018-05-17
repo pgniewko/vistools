@@ -8,7 +8,7 @@ from OpenGL.GL import *
 import numpy as np
 
 def add_image_new(x0, y0):
-    eps = 0.1
+    eps = 0.2
     new_xy = []
     for i in [-1.,0.,1.]:
         for j in [-1.,0.,1.]:

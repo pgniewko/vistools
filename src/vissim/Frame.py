@@ -106,7 +106,6 @@ class Frame:
                      bonds.append([xi,yi,xj,yj])
      
                  elif  j > i:
-                     
                      dx = xi-xj 
                      dy = yi-yj 
                      dij = di+dj
