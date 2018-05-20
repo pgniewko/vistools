@@ -15,8 +15,7 @@ Look at the project's subdirectory to find an examplary data and usage.
 * numpy: `sudo pip install numpy`
 * mayavi: `sudo pip install mayavi`
 * vtk: `sudo pip install vtk`
-* wxpython: `brew instlal wxpython`
-* tornado: `sudo pip install tornado`
+* wxpython: `brew install wxpython`
 
 COPYRIGHT NOTICE
 ================
