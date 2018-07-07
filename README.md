@@ -16,6 +16,7 @@ Look at the project's subdirectory to find an examplary data and usage.
 * mayavi: `sudo pip install mayavi`
 * vtk: `sudo pip install vtk`
 * wxpython: `brew install wxpython`
+* PyOpenGL: `pip install PyOpenGL`
 
 COPYRIGHT NOTICE
 ================
