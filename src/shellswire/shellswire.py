@@ -30,6 +30,7 @@ def draw_bonds_color(coords, bonds, scale_factor=.25, resolution=6):
     points.mlab_source.dataset.lines = nn
     points.mlab_source.update()
     mlab.pipeline.surface(points, representation='wireframe', color=(0.2, 0.2, 0.2))
+    
     return 
 
 
@@ -221,8 +222,10 @@ mesh = mlab.triangular_mesh(x, y, z, fct, color=(.8, .8, .8))
 
 if color_flag == 1:    
     draw_bonds_color(ar, bds, scale_factor=.1, resolution=8)
-else:
+elif color_flag == 0:
     draw_bonds(ar, bds, scale_factor=.1, resolution=8)
+else:
+    pass
 
 eps=0.1
 black = (0,0,0)
