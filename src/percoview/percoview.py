@@ -26,7 +26,7 @@ for xyz_coor in frame_xyz:
 
 if len(sys.argv) > 3:
     if sys.argv[3] == "all" or sys.argv[3] == "cells":
-        mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,0,0))
+        mlab.points3d(X_real, Y_real, Z_real, scale_factor=0.2, opacity=1.0, color=(1,1,0))
 
 black = (0,0,0)
 mlab.plot3d([0, Lx], [0, 0], [0, 0], color=black, tube_radius=0.1)
@@ -84,8 +84,8 @@ for ix in percs:
     Z_3d_c = []
  
     R = 0.0
-    G = 1.0
-    B = 0.1*counter
+    G = 0.1*counter
+    B = 1.0
 
     for i in range(X_dim):
         for j in range(Y_dim):

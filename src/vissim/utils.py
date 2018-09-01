@@ -57,7 +57,10 @@ def draw_disk(d0,x0,y0,rgb):
             y_ = d0 * np.sin(t + DT)
             x1 = x_ * c - y_ * s + x0
             y1 = x_ * s + y_ * c + y0
-            glColor3f(0.5, 0.5, 0.5)
+            if rgb[0] == 1 and rgb[1] == 1 and rgb[2] == 0:
+                glColor3f(1, 0.75, 0.0)
+            else:        
+                glColor3f(0.5, 0.5, 0.5)
             glVertex3f(x1, y1, 0.0)
         glEnd()
 
@@ -118,6 +121,7 @@ def DisplayCallback():
             if cfg.UNC:
                 if uncs[i] == 0 and i%2==1:
                     rgb = [1,0.78,0]
+                    rgb = [1,1,0]
        
             draw_disk(d0,x0,y0,rgb)
     

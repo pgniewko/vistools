@@ -44,9 +44,10 @@ class Frame:
         else:
             for i in range(self.N_):
                 if self.color_[i] == 1:
-                    self.rgb_.append([0.7578125,0.6953125,0.5000000])
+                    #self.rgb_.append([0.7578125,0.6953125,0.5000000])
+                    self.rgb_.append([0.87, 0.83,0.71])
                 elif self.color_[i] == 0:
-                    self.rgb_.append([0.8200000,0.8200000,0.8200000])
+                    self.rgb_.append([0.8700000,0.8700000,0.8700000])
                 elif self.color_[i] == 2:
                     self.rgb_.append([1.0000000,0.0000000,0.0000000])
                 else:
