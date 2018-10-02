@@ -17,7 +17,7 @@ try:
     from OpenGL.GLU import *
     from OpenGL.GLUT import *
 except:
-    print "OpenGL wrapper for python not found"
+    print("OpenGL wrapper for python not found")
 
 
 def read_frames(file_name, L):

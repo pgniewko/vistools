@@ -111,6 +111,12 @@ def DisplayCallback():
             rgb = RGB_[i]
 
             ll = add_image_new(x0, y0)
+            
+            
+            if cfg.UNC:
+                if uncs[i] == 0: # and i % 2 == 1:
+                    rgb = [1,1,0]
+            
             if len( ll ) > 0:
                 for el_ll in ll: 
                     if cfg.PBC:
@@ -118,11 +124,6 @@ def DisplayCallback():
                     else:
                         outer_disks.append([d0,el_ll[0],el_ll[1], [0,1,0]])
 
-            if cfg.UNC:
-                if uncs[i] == 0 and i%2==1:
-                    rgb = [1,0.78,0]
-                    rgb = [1,1,0]
-       
             draw_disk(d0,x0,y0,rgb)
     
         for disk in outer_disks:
@@ -242,7 +243,7 @@ def ScreenShot(filename):
         glReadBuffer(GL_FRONT)
         pixels = glReadPixels(0,0,cfg.SIZEX,cfg.SIZEY,GL_RGB,GL_UNSIGNED_BYTE)
                             
-        image = Image.fromstring("RGB", (cfg.SIZEX, cfg.SIZEY), pixels)
+        image = Image.frombytes("RGB", (cfg.SIZEX, cfg.SIZEY), pixels)
         image = image.transpose( Image.FLIP_TOP_BOTTOM)
         image.save(filename)
     except IOError as err:

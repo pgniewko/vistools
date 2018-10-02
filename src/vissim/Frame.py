@@ -152,6 +152,7 @@ class Frame:
                  rij2 = dx*dx + dy*dy
                  if rij2 < dij*dij:
                      contacts.append( [xi,yi,xj,yj] )
+                     uncs[j] = 1
 
          return contacts,bonds,uncs
 
