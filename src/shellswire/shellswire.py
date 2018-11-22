@@ -95,7 +95,7 @@ def get_triangles(filename):
     triangles_list = []
     
     for line in fin:
-        if line.startswith("CELLTRIANG"):
+        if line.startswith("SHELLTRIANG"):
             pairs = line.rstrip('\n').split()
             cellid = int(pairs[1])
             vid1 = int(pairs[3])
