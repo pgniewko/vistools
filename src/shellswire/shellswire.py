@@ -6,7 +6,7 @@ from mayavi import mlab
 import networkx as nx
 
 
-def draw_bonds_color(coords, bonds, scale_factor=.25, resolution=6):
+def draw_bonds_color(coords, bonds, scale_factor=.1, resolution=2):
     '''
     color by coordination number
     '''
@@ -34,13 +34,16 @@ def draw_bonds_color(coords, bonds, scale_factor=.25, resolution=6):
     return 
 
 
-def draw_bonds(coords, bonds, scale_factor=.3, resolution=6, cc=(0.3, 0.3, 0.3)):
+def draw_bonds(coords, bonds, scale_factor=.1, resolution=2, cc=(0.3, 0.3, 0.3), skip_verts=True):
     '''
     unicolor
     '''
     x, y, z = coords.T
-    points = mlab.points3d(x, y, z, scale_mode='none', scale_factor=scale_factor, resolution=resolution, color=cc)
-    
+    if skip_verts:
+        points = mlab.points3d(x, y, z, scale_mode='none', scale_factor=0, resolution=resolution, color=cc)
+    else:
+        points = mlab.points3d(x, y, z, scale_mode='none', scale_factor=scale_factor, resolution=resolution, color=cc)
+
     points.mlab_source.dataset.lines = bonds
     points.mlab_source.update()
     mlab.pipeline.surface(points, representation='wireframe', color=(0.5, 0.5, 0.5))
@@ -62,7 +65,7 @@ def scale_coords(xyz_l, bx, by, bz, size_=5.0):
 
     maxb = max( max(bx, by), bz)
     scale = size_ / maxb
-    print "Scaling factor:", scale
+    print ("Scaling factor:", scale)
     for xyz in xyz_l:
         xyz[0] *= scale
         xyz[1] *= scale
@@ -224,6 +227,8 @@ if color_flag == 1:
     draw_bonds_color(ar, bds, scale_factor=.1, resolution=8)
 elif color_flag == 0:
     draw_bonds(ar, bds, scale_factor=.1, resolution=8)
+elif color_flag == -1:
+    draw_bonds(ar, bds, scale_factor=.1, resolution=8, skip_verts=True)
 else:
     pass
 
